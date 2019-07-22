@@ -1,0 +1,9 @@
+## Target folder content exclude ##
+**/target
+
+## OS generated files ##
+**/.DS_Store
+
+## Intellij IDEA ##
+**/.idea
+
