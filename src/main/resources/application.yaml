@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/DEV_DB
+    username: kensin
+    password: 989277229
+  jpa:
+    hibernate:
+      # Hibernate ddl auto (create, create-drop, validate, update)
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            # workaround to avoid Hibernate error: https://github.com/pgjdbc/pgjdbc/issues/1102
+            non_contextual_creation: true
+    show-sql: true
