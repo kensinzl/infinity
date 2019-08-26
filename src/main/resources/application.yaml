@@ -16,3 +16,15 @@ spring:
             # workaround to avoid Hibernate error: https://github.com/pgjdbc/pgjdbc/issues/1102
             non_contextual_creation: true
     show-sql: true
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              # logs the prepared statement parameters
+              BasicBinder: TRACE
+
