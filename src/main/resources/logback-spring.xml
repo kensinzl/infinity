@@ -10,7 +10,7 @@
 
     <appender name="Hibernate_Log" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>Hibernate_Log.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logFiles/Hibernate_Log.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
@@ -22,7 +22,7 @@
 
     <appender name="System_Log" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>System_Log.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logFiles/System_Log.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
