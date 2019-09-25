@@ -8,10 +8,9 @@ import nz.co.indepth.infinity.validator.BeanValidators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -42,6 +41,21 @@ public class MovieController {
             validations.forEach ((k, v) -> System.out.println ("--------" + k + ": " + v));
             return new MoviePO ();
         }
+    }
+
+    @GetMapping
+    public List<MoviePO> getMovies() {
+        return movieService.getMovies ();
+    }
+
+    @GetMapping("/{name}")
+    public MoviePO findByMovieName(@PathVariable("name") String name) {
+        return movieService.findByMovieName (name);
+    }
+
+    @GetMapping("?name={name}")
+    public MoviePO fetchByMovieName(@RequestParam("name") String name) {
+        return movieService.findByMovieName (name);
     }
 
 }
