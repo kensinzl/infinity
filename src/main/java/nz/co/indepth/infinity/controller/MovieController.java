@@ -43,18 +43,17 @@ public class MovieController {
         }
     }
 
+    /**
+     * @RequestParam and @PathVariable
+     * https://www.baeldung.com/spring-request-param
+     */
     @GetMapping
-    public List<MoviePO> getMovies() {
-        return movieService.getMovies ();
+    public List<MoviePO> findMovieByName(@RequestParam(name="name", required=false) String name) {
+        return movieService.findMovieByName (name);
     }
 
     @GetMapping("/{name}")
-    public MoviePO findByMovieName(@PathVariable("name") String name) {
-        return movieService.findByMovieName (name);
-    }
-
-    @GetMapping("?name={name}")
-    public MoviePO fetchByMovieName(@RequestParam("name") String name) {
+    public MoviePO fetchByMovieName(@PathVariable("name") String name) {
         return movieService.findByMovieName (name);
     }
 

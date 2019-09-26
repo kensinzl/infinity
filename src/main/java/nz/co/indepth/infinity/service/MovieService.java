@@ -8,7 +8,7 @@ import java.util.List;
 public interface MovieService {
     public Movie createMovie(MoviePO po);
 
-    public List<MoviePO> getMovies();
-
     public MoviePO findByMovieName(String name);
+
+    public List<MoviePO>  findMovieByName(String name);
 }
