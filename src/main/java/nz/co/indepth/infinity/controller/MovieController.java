@@ -57,7 +57,7 @@ public class MovieController {
         return movieService.findByMovieName (name);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public String deleteMovie(@RequestBody MoviePO moviePO) {
         return movieService.deleteMovie (moviePO);
     }
