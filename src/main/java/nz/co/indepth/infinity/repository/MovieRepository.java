@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -18,12 +19,12 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
      * https://thoughts-on-java.org/ultimate-guide-derived-queries-with-spring-data-jpa/
      * perform like this select m from Movie m where m.moviename = moviename
      */
-    public Movie findByMovieName(String movieName);
-    public Movie findMovieByMovieName(String movieName);
+    public Optional<Movie> findByMovieName(String movieName);
+    public Optional<Movie> findMovieByMovieName(String movieName);
 
 
     @Query("select m from Movie m where m.movieName like %:movieName%")
-    public List<Movie> findMovieByName(@Param ("movieName") String movieName, Pageable pageable);
+    public List<Movie> fetchMovieByName(@Param ("movieName") String movieName, Pageable pageable);
 
 
     /**

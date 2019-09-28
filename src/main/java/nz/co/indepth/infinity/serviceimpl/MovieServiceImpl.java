@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -32,14 +33,18 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MoviePO findByMovieName(String name) {
-        Movie movie1 = movieRepository.findByMovieName (name);
-        Movie movie2 = movieRepository.findMovieByMovieName (name);
+        Optional<Movie> movie1 = movieRepository.findByMovieName (name);
+        Optional<Movie> movie2 = movieRepository.findMovieByMovieName (name);
 
-        boolean isEqual = movie1.equals (movie2) ;
+        if(movie1.isPresent () && movie2.isPresent ()) {
+            boolean isEqual = movie1.equals (movie2) ;
+            Assert.isTrue (isEqual, "The above two method should return the same result. ");
+            return movieMapper.movieToPo (movie1.get ());
+        } else {
+            // TODO: should return 404 not found
+            return new MoviePO ();
+        }
 
-        Assert.isTrue (isEqual, "The above two method should return the same result. ");
-
-        return movieMapper.movieToPo (movie1);
     }
 
     @Override
@@ -52,7 +57,7 @@ public class MovieServiceImpl implements MovieService {
         // 1. using @Query annotation
         Pageable sortedByPriceDescNameAsc =
                 PageRequest.of(0, 3, Sort.by("price").descending().and(Sort.by("movieName")));
-        List<Movie> movies = movieRepository.findMovieByName (name, sortedByPriceDescNameAsc);
+        List<Movie> movies = movieRepository.fetchMovieByName (name, sortedByPriceDescNameAsc);
 
         // 2. using function method
         List<Movie> moviesUsedContains = movieRepository.findByMovieNameContains (name);
@@ -66,7 +71,7 @@ public class MovieServiceImpl implements MovieService {
                         moviesUsedContains.get (0).equals (moviesUsedIsContaining.get (0));
         Assert.isTrue (isEqual, "The above three method should return the same result. ");
 
-        return movieMapper.movieListToPo (moviesUsedContains);
+        return movieMapper.movieListToPo (movies);
     }
 
 
