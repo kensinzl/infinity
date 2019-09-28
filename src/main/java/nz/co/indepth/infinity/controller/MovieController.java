@@ -29,11 +29,11 @@ public class MovieController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MovieController.class);
 
     @PostMapping
-    public MoviePO createMovie(@RequestBody MoviePO moviePO) {
+    public MoviePO createOrUpdateMovie(@RequestBody MoviePO moviePO) {
 
         Map<String, String> validations = beanValidators.validateBeanMayWithException (moviePO);
         if(validations.isEmpty ()) {
-            Movie movie = movieService.createMovie (moviePO);
+            Movie movie = movieService.createOrUpdateMovie (moviePO);
             LOGGER.debug ("-------- created movie: " + movie);
             return movieMapper.movieToPo (movie);
         } else {
@@ -55,6 +55,11 @@ public class MovieController {
     @GetMapping("/{name}")
     public MoviePO fetchByMovieName(@PathVariable("name") String name) {
         return movieService.findByMovieName (name);
+    }
+
+    @DeleteMapping("/delete")
+    public String deleteMovie(@RequestBody MoviePO moviePO) {
+        return movieService.deleteMovie (moviePO);
     }
 
 }

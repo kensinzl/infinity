@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -26,8 +27,18 @@ public class MovieServiceImpl implements MovieService {
     private MovieRepository movieRepository;
 
     @Override
-    public Movie createMovie(MoviePO po) {
+    public Movie createOrUpdateMovie(MoviePO po) {
         Movie movie = movieMapper.moviePOToEntity (po);
+        if(Objects.nonNull (movie.getId ()) && movie.getId () > 0) {
+            boolean exist = movieRepository.findById (movie.getId ()).isPresent ();
+            if(!exist) {
+                // TODO: throw 400 to client
+            }
+        }
+        /**
+         * Here, no need to save(persisted object)
+         * https://www.baeldung.com/spring-data-crud-repository-save
+         */
         return movieRepository.save (movie);
     }
 
@@ -72,6 +83,17 @@ public class MovieServiceImpl implements MovieService {
         Assert.isTrue (isEqual, "The above three method should return the same result. ");
 
         return movieMapper.movieListToPo (movies);
+    }
+
+    @Override
+    public String deleteMovie(MoviePO moviePO) {
+        /**
+         * No need to pass PO, because the source code of delete is still use ID.
+         * In this instance, just use MovieId is enough
+         */
+        Movie movie = movieMapper.moviePOToEntity (moviePO);
+        movieRepository.delete (movie);
+        return "Successfully deleted. ";
     }
 
 
