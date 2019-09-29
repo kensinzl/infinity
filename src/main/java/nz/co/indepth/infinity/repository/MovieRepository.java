@@ -52,4 +52,11 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     public List<Movie> findByMovieNameNotContains(String moviename);
     public List<Movie> findByMovieNameIsNotContaining(String moviename);
 
+    /**
+     * delete from movie where author = author
+     * delete from movie where movieName = movieName
+     */
+    public void deleteByAuthor(String author);
+    public void deleteByMovieName(String movieName);
+
 }

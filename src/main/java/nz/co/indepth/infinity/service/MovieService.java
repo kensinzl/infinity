@@ -6,7 +6,9 @@ import nz.co.indepth.infinity.po.MoviePO;
 import java.util.List;
 
 public interface MovieService {
-    public Movie createOrUpdateMovie(MoviePO po);
+    public MoviePO createMovie(MoviePO po);
+
+    public MoviePO updateMovie(MoviePO po);
 
     public MoviePO findByMovieName(String name);
 

@@ -27,7 +27,13 @@ public class MovieServiceImpl implements MovieService {
     private MovieRepository movieRepository;
 
     @Override
-    public Movie createOrUpdateMovie(MoviePO po) {
+    public MoviePO createMovie(MoviePO po) {
+        Movie movie = movieMapper.moviePOToEntity (po);
+        return movieMapper.movieToPo (movieRepository.save (movie));
+    }
+
+    @Override
+    public MoviePO updateMovie(MoviePO po) {
         Movie movie = movieMapper.moviePOToEntity (po);
         if(Objects.nonNull (movie.getId ()) && movie.getId () > 0) {
             boolean exist = movieRepository.findById (movie.getId ()).isPresent ();
@@ -39,7 +45,7 @@ public class MovieServiceImpl implements MovieService {
          * Here, no need to save(persisted object)
          * https://www.baeldung.com/spring-data-crud-repository-save
          */
-        return movieRepository.save (movie);
+        return movieMapper.movieToPo (movieRepository.save (movie));
     }
 
     @Override
