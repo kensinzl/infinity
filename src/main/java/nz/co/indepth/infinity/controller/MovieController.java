@@ -35,7 +35,7 @@ public class MovieController {
         } else {
             // TODO: how to make a springboot response
             validations.forEach ((k, v) -> System.out.println ("--------" + k + ": " + v));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body((MoviePO)null);
+            return ResponseEntity.status (HttpStatus.BAD_REQUEST).build ();
         }
     }
 
