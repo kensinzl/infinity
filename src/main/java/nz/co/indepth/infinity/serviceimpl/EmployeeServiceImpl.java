@@ -46,10 +46,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 // TODO: throw 400 to client
             }
         }
-        /**
-         * Here, no need to save(persisted object)
-         * https://www.baeldung.com/spring-data-crud-repository-save
-         */
         return employeeMapper.employeeToPo (employeeRepository.save (employee));
     }
 

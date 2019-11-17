@@ -41,10 +41,6 @@ public class MovieServiceImpl implements MovieService {
                 // TODO: throw 400 to client
             }
         }
-        /**
-         * Here, no need to save(persisted object)
-         * https://www.baeldung.com/spring-data-crud-repository-save
-         */
         return movieMapper.movieToPo (movieRepository.save (movie));
     }
 

@@ -16,12 +16,13 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     /**
      * Derived Queries
+     * Using Intelligence Hitting, By "name" is referring to the field name
+     *
      * https://thoughts-on-java.org/ultimate-guide-derived-queries-with-spring-data-jpa/
      * perform like this select m from Movie m where m.moviename = moviename
      */
     public Optional<Movie> findByMovieName(String movieName);
     public Optional<Movie> findMovieByMovieName(String movieName);
-
 
     @Query("select m from Movie m where m.movieName like %:movieName%")
     public List<Movie> fetchMovieByName(@Param ("movieName") String movieName, Pageable pageable);
@@ -58,5 +59,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
      */
     public void deleteByAuthor(String author);
     public void deleteByMovieName(String movieName);
+
 
 }

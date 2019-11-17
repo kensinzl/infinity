@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "/email")
@@ -22,6 +24,24 @@ public class EmailController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailController.class);
 
+    /**
+     * @RequestParam and @PathVariable
+     * https://www.baeldung.com/spring-request-param
+     *
+     * 1. @RequestParam:
+     *      email?address=value, the default required attribute value is true that means user have to assign the value,
+     *      otherwise, required value is false. There is no need to assign address value and then the address value would be null.
+     *
+     * 2. @PathVariable:
+     *      This works like @RequestParam, but the URI is different.
+     *          i)  the path is email/addressValue.
+     *          ii) GetMapping("/{address}") you need explicitly define the path, when required=true
+     *      Of course, required is equal true or false which need you assign the value or not.
+     *
+     *  Conclusion:
+     *      @RequestParam is to ? param assign or not assign
+     *      @PathVariable is for the explicitly define the value
+     **/
     @GetMapping("/{address}")
     public ResponseEntity<EmailPO> fetchMovie(@PathVariable(name="address") String address) {
         EmailPO result = emailService.findEmailByAddress (address);
@@ -38,5 +58,10 @@ public class EmailController {
     @DeleteMapping
     public String deleteMovie(@RequestBody EmailPO emailPO) {
         return emailService.deleteEmail (emailPO);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EmailPO>> fetchAllEmails() {
+        return ResponseEntity.status(HttpStatus.OK).body(emailService.fetchAllEmails ());
     }
 }

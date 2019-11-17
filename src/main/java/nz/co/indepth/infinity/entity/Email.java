@@ -18,15 +18,19 @@ public class Email {
     private String emailAddress;
 
     /**
-     * @ManyToOne's fetch mode default is eager
-     *              optional true non-null relationship must not exist
+     * @ManyToOne's
+     *  1. fetch mode default value is eager, because just one record row
+     *  2. optional default is true, true that means works like left join, false works like inner join.
      *
-     * TODO: Test case:
-     *  1. Fetch Email should always gets Employee
-     *  2. try delte email, to see employee and vise versa
+     * Test case:
+     *  1. Fetch Email should always gets Employee.
+     *      -> Yes, fetch email will also fetch employee. Using findEmailBy.. or JPQL
+     *  2. try delete email, to see employee.
+     *      -> Delete email will also delete employee because of cascade all if using deleteEmailBy..
+     *      -> Delete email will not delete employee if using JPQL "delete from email"
      */
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", referencedColumnName = "employee_id", nullable = false)
     private Employee employee;
 
     public Long getId() {
