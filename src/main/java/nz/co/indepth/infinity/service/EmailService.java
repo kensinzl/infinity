@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface EmailService {
-    public EmailPO createEmail(EmailPO po);
+    public List<EmailPO> createEmail(List<EmailPO> emailPOs);
 
     public EmailPO findEmailByAddress(String address);
 

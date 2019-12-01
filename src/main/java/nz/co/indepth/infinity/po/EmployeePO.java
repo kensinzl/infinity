@@ -22,7 +22,7 @@ public class EmployeePO {
 
     @Override
     public String toString() {
-        return "EmployeePO{" +
+        return "EmployeePO { " +
                 "id=" + id +
                 ", employeeName='" + employeeName + '}';
     }

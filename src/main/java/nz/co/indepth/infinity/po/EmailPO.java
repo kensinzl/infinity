@@ -5,6 +5,7 @@ package nz.co.indepth.infinity.po;
 public class EmailPO {
     private Long id;
     private String emailAddress;
+    private Long employeeId;
     private EmployeePO employeePO;
 
     public Long getId() {
@@ -19,9 +20,19 @@ public class EmailPO {
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
+
     public EmployeePO getEmployeePO() {
         return employeePO;
     }
+
     public void setEmployeePO(EmployeePO employeePO) {
         this.employeePO = employeePO;
     }
@@ -31,6 +42,7 @@ public class EmailPO {
         return "EmailPO{" +
                 "id=" + id +
                 ", emailAddress='" + emailAddress + '\'' +
+                ", employeeId=" + employeeId +
                 ", employeePO=" + employeePO +
                 '}';
     }
