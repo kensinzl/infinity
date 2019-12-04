@@ -65,4 +65,10 @@ public class EmailController {
         return emailService.deleteEmail (emailPO);
     }
 
+//    @DeleteMapping
+//    public String deleteMovies() {
+//        return emailService.deleteEmails ();
+//    }
+
+
 }

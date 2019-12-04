@@ -64,7 +64,7 @@ public interface EmailRepository extends JpaRepository<Email, Long> {
      */
     @Transactional
     @Modifying
-    @Query("delete from Email e")
+    @Query("delete from Email e where e.employeeId=1")
     public void deleteAllEmail();
 
 

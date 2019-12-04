@@ -68,6 +68,26 @@ public class EmailServiceImpl implements EmailService {
         return "Successfully deleted. ";
     }
 
+    /**
+     *  This one just for test learning.
+     *  deleteAll or deleteAll(Iterable) will loop the delete items.
+     *
+     *  Eg: I have three emails on the DataBase, so you would see three times delete SQL when you executing deleteAll.
+     *  delete from email where email_id=?
+     *  delete from email where email_id=?
+     *  delete from email where email_id=?
+     *
+     *  In this instance, if you can assume this delete operation would manipulate huge items.
+     *  It is better to use @Query("delete from entity from where condition").
+     *  This only execute one SQL statement.
+     */
+    @Deprecated
+    public String deleteEmails() {
+        //emailRepository.deleteAll ();
+        emailRepository.deleteAllEmail();
+        return "Successfully deleted. ";
+    }
+
     @Override
     public List<EmailPO> fetchAllEmails() {
         List<Email> emails = emailRepository.fetchAllEmails ();
