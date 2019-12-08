@@ -88,6 +88,12 @@ public class EmailServiceImpl implements EmailService {
         return "Successfully deleted. ";
     }
 
+    @Deprecated
+    public EmailPO findEmailUsingFetch(String address) {
+        Email email = emailRepository.findEmailUsingFetch (address);
+        return emailMapper.emailToPo (email);
+    }
+
     @Override
     public List<EmailPO> fetchAllEmails() {
         List<Email> emails = emailRepository.fetchAllEmails ();

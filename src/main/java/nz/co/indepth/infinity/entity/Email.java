@@ -50,7 +50,7 @@ public class Email {
      *         employee is 10L record would be changed if employee changed the original value.
      *
      */
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "employee_id",
                 referencedColumnName = "employee_id",
                 unique = true,
