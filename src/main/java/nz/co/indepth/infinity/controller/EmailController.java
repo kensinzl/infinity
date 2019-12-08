@@ -51,7 +51,7 @@ public class EmailController {
      **/
     @GetMapping("/{address}")
     public ResponseEntity<EmailPO> fetchMovie(@PathVariable(name="address", required = true) String address) {
-        EmailPO result = emailService.findEmailByAddress (address);
+        EmailPO result = emailService.findEmailUsingFetch (address);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

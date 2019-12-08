@@ -79,10 +79,11 @@ public interface EmailRepository extends JpaRepository<Email, Long> {
 
     /**
      * When Employee is defined Lazy in the Email enetity.
-     * In order to initialize employee at the same time, you can change into Eager or JPQL fetch
+     * In order to initialize employee at the same time,
+     * you can change into Eager or JPQL fetch(no matter left join or inner join)
      */
     @Deprecated
-    @Query("select email from Email email left join fetch email.employee where email.emailAddress = :emailAddress")
+    @Query("select email from Email email inner join fetch email.employee where email.emailAddress = :emailAddress")
     public Email findEmailUsingFetch(@Param ("emailAddress") String emailAddress);
 
 }
