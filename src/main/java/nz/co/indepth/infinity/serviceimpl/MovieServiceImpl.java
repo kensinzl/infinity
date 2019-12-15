@@ -93,6 +93,9 @@ public class MovieServiceImpl implements MovieService {
         /**
          * No need to pass PO, because the source code of delete is still use ID.
          * In this instance, just use MovieId is enough
+         *
+         * FIXME: Here just for a negative exmaple, before deleting, should check the entity first.
+         * Although, SpringBoot has done it for me. See the source code.
          */
         Movie movie = movieMapper.moviePOToEntity (moviePO);
         movieRepository.delete (movie);

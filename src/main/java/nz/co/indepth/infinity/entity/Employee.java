@@ -23,7 +23,7 @@ public class Employee {
      * TODO:
      *  Test: orphan removal setting true, dis-connect the relationship
      */
-    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Movie> movies;
 
     public Long getId() {
