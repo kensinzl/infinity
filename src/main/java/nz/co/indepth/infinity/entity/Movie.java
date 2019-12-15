@@ -21,6 +21,17 @@ public class Movie {
     @Column(name = "author")
     private String author;
 
+//    @Column(name = "employee_id")
+//    private Long employeeId;
+
+    /**
+     * Only for fetching
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "employee_id", referencedColumnName = "employee_id", insertable = false, updatable = false)
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
     public Long getId() {
         return id;
     }
@@ -53,14 +64,20 @@ public class Movie {
     public void setAuthor(String author) {
         this.author = author;
     }
+//
+//    public Long getEmployeeId() {
+//        return employeeId;
+//    }
+//
+//    public void setEmployeeId(Long employeeId) {
+//        this.employeeId = employeeId;
+//    }
 
-    @Override
-    public String toString() {
-        return "Movie Entity {" +
-                "id=" + id +
-                ", movieName='" + movieName + '\'' +
-                ", price=" + price +
-                ", author='" + author + '\'' +
-                '}';
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }

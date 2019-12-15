@@ -46,11 +46,13 @@ public abstract class EmailMapper {
     }
 
     @Mapping (target = "employee", source = "employeePO")
+    @Mapping (target = "employee.movies", ignore = true)
     public abstract Email checkPOIdHasEntity(@MappingTarget Email email, EmailPO emailPO);
 
     public abstract List<Email> emailPOListToEntityList(List<EmailPO> emailPOs);
 
     @Mapping (target = "employeePO", source = "employee")
+    @Mapping (target = "employeePO.moviePOs", ignore = true)
     public abstract EmailPO emailToPo(Email email);
 
     public abstract List<EmailPO> emailPoListToEmails(List<Email> emails);

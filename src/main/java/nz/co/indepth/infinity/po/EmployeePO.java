@@ -1,10 +1,13 @@
 package nz.co.indepth.infinity.po;
 
 
+import java.util.List;
+import java.util.Set;
 
 public class EmployeePO {
     private Long id;
     private String employeeName;
+    private List<MoviePO> moviePOs;
 
 
     public Long getId() {
@@ -20,10 +23,11 @@ public class EmployeePO {
         this.employeeName = employeeName;
     }
 
-    @Override
-    public String toString() {
-        return "EmployeePO { " +
-                "id=" + id +
-                ", employeeName='" + employeeName + '}';
+    public List<MoviePO> getMoviePOs() {
+        return moviePOs;
+    }
+
+    public void setMoviePOs(List<MoviePO> moviePOS) {
+        this.moviePOs = moviePOS;
     }
 }

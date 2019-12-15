@@ -1,6 +1,7 @@
 package nz.co.indepth.infinity.entity;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,14 +19,12 @@ public class Employee {
     @Column(name = "employee_name")
     private String employeeName;
 
-//    /**
-//     * Test case:
-//     *  1. Only fetch Employee should not see the emails. If want to see email, it should use employee.getEmails
-//     *  2. Detach employee, employee.getEmails will invoke the proxy lost issue
-//     *  3. should see the SQL
-//     */
-//    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Set<Email> emails;
+    /**
+     * TODO:
+     *  Test: orphan removal setting true, dis-connect the relationship
+     */
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Movie> movies;
 
     public Long getId() {
         return id;
@@ -43,15 +42,12 @@ public class Employee {
         this.employeeName = employeeName;
     }
 
+    public List<Movie> getMovies() {
+        return movies;
+    }
 
-//    public Set<Email> getEmails() {
-//        return emails;
-//    }
-//
-//    public void setEmails(Set<Email> emails) {
-//        this.emails = emails;
-//    }
-
-
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+    }
 }
 

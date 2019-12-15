@@ -8,6 +8,8 @@ public class MoviePO {
     private Long id;
     private String movieName;
     private BigDecimal price;
+//    private Long employeeId;
+    private EmployeePO employeePO;
 
     @Author
     private String author;
@@ -44,13 +46,19 @@ public class MoviePO {
         this.author = author;
     }
 
-    @Override
-    public String toString() {
-        return "MoviePO{" +
-                "id=" + id +
-                ", movieName='" + movieName + '\'' +
-                ", price=" + price +
-                ", author='" + author + '\'' +
-                '}';
+//    public Long getEmployeeId() {
+//        return employeeId;
+//    }
+//
+//    public void setEmployeeId(Long employeeId) {
+//        this.employeeId = employeeId;
+//    }
+
+    public EmployeePO getEmployeePO() {
+        return employeePO;
+    }
+
+    public void setEmployeePO(EmployeePO employeePO) {
+        this.employeePO = employeePO;
     }
 }
