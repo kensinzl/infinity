@@ -21,6 +21,11 @@ public class Movie {
     @Column(name = "author")
     private String author;
 
+    /**
+     * Fetch Only.
+     * If do not explicitly define insetable and updatable, you would cause repeated issue.
+     * Employee:employee_id and employee_id
+     */
     @Column(name = "employee_id", insertable = false, updatable = false)
     private Long employeeId;
 

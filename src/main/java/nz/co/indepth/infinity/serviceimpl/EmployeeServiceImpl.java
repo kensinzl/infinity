@@ -61,6 +61,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         /**
          * No need to pass PO, because the source code of delete is still use ID.
          * In this instance, just use MovieId is enough
+         *
+         * NOTICE: Here is a negative example.
+         * In reality, you should fetch PO.Id to get entity then em.remove entity. See the source code
+         *
+         * Although, in the common DB, we can not delete the main table if kid table has the related value
+         * because if delete the main table first, then the FK of kid tables's value would be null. Invalid
+         *
+         * But in the Spring Data, it seems fine, only using Cascade.ALL
+         * I think it combine the amazing orphan, but I already for the optional and orphan for the Spring Boot
          */
         Employee employee = employeeMapper.employeePOToEntity (employeePO);
         employeeRepository.delete (employee);
