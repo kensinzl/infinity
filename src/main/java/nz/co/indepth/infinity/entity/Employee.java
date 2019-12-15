@@ -19,10 +19,6 @@ public class Employee {
     @Column(name = "employee_name")
     private String employeeName;
 
-    /**
-     * TODO:
-     *  Test: orphan removal setting true, dis-connect the relationship
-     */
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Movie> movies;
 
