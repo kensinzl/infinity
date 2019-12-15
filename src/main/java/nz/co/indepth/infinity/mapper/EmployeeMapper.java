@@ -16,9 +16,8 @@ import java.util.Set;
 @Mapper(componentModel = "spring",
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        unmappedTargetPolicy = ReportingPolicy.ERROR//,
-        //uses = MovieMapper.class
-        )
+        unmappedTargetPolicy = ReportingPolicy.ERROR,
+        uses = MovieMapper.class)
 public abstract class EmployeeMapper {
 
     @Autowired
@@ -38,29 +37,18 @@ public abstract class EmployeeMapper {
         }
     }
 
-    //@Mapping (target = "movies", source = "moviePOs")
-    @Mapping (target = "movies", ignore = true)
+    @Mapping (target = "movies", source = "moviePOs")
     public abstract Employee checkPOIdHasEntity(@MappingTarget Employee employee, EmployeePO employeePO);
 
 
     @AfterMapping
-    private void projectEmployeeIntoMovie(@MappingTarget Employee employee, EmployeePO employeePO) {
-        List<Movie> movies = movieMapper.moviePOListToEntity (employeePO.getMoviePOs ());
-        employee.setMovies (movies);
-        employee.getMovies ().stream ().forEach (movie -> movie.setEmployee (employee));
+    protected void projectEmployeeIntoMovie(@MappingTarget Employee employee, EmployeePO employeePO) {
+        employee.getMovies ().forEach (movie -> movie.setEmployee (employee));
     }
 
 
-    //@Mapping (target = "moviePOs", source = "movies")
-    @Mapping (target = "moviePOs", ignore = true)
+    @Mapping (target = "moviePOs", source = "movies")
     public abstract EmployeePO employeeToPo(Employee employee);
-
-    @AfterMapping
-    private void projectEmployeePOIntoMoviePO(@MappingTarget EmployeePO employeePO, Employee employee) {
-        List<MoviePO> moviePOs = movieMapper.movieListToPo (employee.getMovies ());
-        employeePO.setMoviePOs (moviePOs);
-        employeePO.getMoviePOs ().stream ().forEach (movie -> movie.setEmployeePO (employeePO));
-    }
 
     public abstract List<EmployeePO> employeeListToPo(List<Employee> employees);
 }

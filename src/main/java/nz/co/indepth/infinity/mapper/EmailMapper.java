@@ -68,6 +68,7 @@ public abstract class EmailMapper {
 
 
 // TODO: I do not why @ObjectFactory can not work among springboot.
+// TODO;    -> I think I know why
 //    @ObjectFactory
 //    private Email checkPOIdHasEntity(EmailPO emailPO) {
 //        if(Objects.isNull (emailPO) || Objects.isNull (emailPO.getId ())) {

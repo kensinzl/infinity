@@ -1,5 +1,6 @@
 package nz.co.indepth.infinity.po;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import nz.co.indepth.infinity.validator.Author;
 
 import java.math.BigDecimal;
@@ -8,7 +9,9 @@ public class MoviePO {
     private Long id;
     private String movieName;
     private BigDecimal price;
-//    private Long employeeId;
+    @JsonIgnore
+    private Long employeeId;
+    @JsonIgnore
     private EmployeePO employeePO;
 
     @Author
@@ -46,13 +49,13 @@ public class MoviePO {
         this.author = author;
     }
 
-//    public Long getEmployeeId() {
-//        return employeeId;
-//    }
-//
-//    public void setEmployeeId(Long employeeId) {
-//        this.employeeId = employeeId;
-//    }
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
 
     public EmployeePO getEmployeePO() {
         return employeePO;
