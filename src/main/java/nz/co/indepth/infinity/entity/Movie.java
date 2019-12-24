@@ -21,6 +21,22 @@ public class Movie {
     @Column(name = "author")
     private String author;
 
+    /**
+     * Fetch Only.
+     * If do not explicitly define insetable and updatable, you would cause repeated issue.
+     * Employee:employee_id and employee_id
+     */
+    @Column(name = "employee_id", insertable = false, updatable = false)
+    private Long employeeId;
+
+    /**
+     * Only for fetching
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", referencedColumnName = "employee_id",
+            insertable = true, updatable = false, nullable = false)
+    private Employee employee;
+
     public Long getId() {
         return id;
     }
@@ -54,13 +70,19 @@ public class Movie {
         this.author = author;
     }
 
-    @Override
-    public String toString() {
-        return "Movie Entity {" +
-                "id=" + id +
-                ", movieName='" + movieName + '\'' +
-                ", price=" + price +
-                ", author='" + author + '\'' +
-                '}';
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }

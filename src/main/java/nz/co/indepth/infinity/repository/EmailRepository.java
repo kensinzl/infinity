@@ -64,7 +64,7 @@ public interface EmailRepository extends JpaRepository<Email, Long> {
      */
     @Transactional
     @Modifying
-    @Query("delete from Email e")
+    @Query("delete from Email e where e.employeeId=1")
     public void deleteAllEmail();
 
 
@@ -76,5 +76,14 @@ public interface EmailRepository extends JpaRepository<Email, Long> {
      */
     @Query("select e from Email e")
     public List<Email> fetchAllEmails();
+
+    /**
+     * When Employee is defined Lazy in the Email enetity.
+     * In order to initialize employee at the same time,
+     * you can change into Eager or JPQL fetch(no matter left join or inner join)
+     */
+    @Deprecated
+    @Query("select email from Email email inner join fetch email.employee where email.emailAddress = :emailAddress")
+    public Email findEmailUsingFetch(@Param ("emailAddress") String emailAddress);
 
 }
