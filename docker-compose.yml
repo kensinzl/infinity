@@ -1,0 +1,29 @@
+version: "3.4"
+services:
+  mydb:
+    build:
+      context: ./
+      dockerfile: ./DB_Dockerfile/Dockerfile
+    container_name: postgres_db
+    restart: always
+    ports:
+      - 5432:5432
+    networks:
+      - infinitytwork
+
+  web:
+    build: .
+    container_name: infinity_web
+    restart: always
+    entrypoint: /build/src/entrypoint.sh
+    ports:
+      - 8080:8080
+    depends_on:
+      - mydb
+    networks:
+      - infinitytwork
+networks:
+  infinitytwork:
+    driver: bridge
+#    volumes:
+#      - /Users/zhaoliang/.m2:/root/.m2
