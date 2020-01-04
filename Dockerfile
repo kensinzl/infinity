@@ -1,4 +1,11 @@
-FROM openjdk:8-jdk-alpine
+FROM postgres:latest as db
+ENV POSTGRES_USER=kensin  
+ENV POSTGRES_PASSWORD=989277229  
+# database name
+ENV POSTGRES_DB=DEV_DB
+
+
+FROM openjdk:8-jdk-alpine as web_api
 
 # Downloading and installing Maven
 # 1- Define a constant with the version of maven you want to install
