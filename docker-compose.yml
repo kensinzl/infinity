@@ -8,8 +8,6 @@ services:
     restart: always
     ports:
       - 5432:5432
-    networks:
-      - infinitytwork
 
   web:
     build: 
@@ -22,10 +20,3 @@ services:
       - 8080:8080
     depends_on:
       - mydb
-    networks:
-      - infinitytwork
-networks:
-  infinitytwork:
-    driver: bridge
-#    volumes:
-#      - /Users/zhaoliang/.m2:/root/.m2
