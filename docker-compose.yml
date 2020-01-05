@@ -22,8 +22,6 @@ services:
     entrypoint: /build/src/entrypoint.sh
     ports:
       - 8080:8080
-    depends_on:
-      - mydb
     volumes:
       - ~/.m2:/root/.m2
 
