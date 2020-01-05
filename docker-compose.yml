@@ -6,6 +6,10 @@ services:
       target: db
     container_name: postgres_db
     restart: always
+    networks:
+      default:
+        aliases:
+          - postgres_ip
     ports:
       - 5432:5432
 
@@ -38,3 +42,4 @@ services:
 # that means the result is 
 #  datasource:
 #    url: jdbc:postgresql://mydb:5432/DEV_DB
+# further I also can use the aliases name or service name. like mudb or postgres_ip

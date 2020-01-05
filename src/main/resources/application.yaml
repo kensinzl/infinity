@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://mydb:5432/DEV_DB
+    # the host name is referring the dockerfile postgres service name(mydb) or aliases name(postgres_ip) when using docker
+    url: jdbc:postgresql://postgres_ip:5432/DEV_DB
     username: kensin
     password: 989277229
   jpa:
