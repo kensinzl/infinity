@@ -21,9 +21,20 @@ services:
     depends_on:
       - mydb
 
+# Note:
+# 1. 
 # Although I do not explicitly define the network for two containers,
 # the docker still create the bridge network for me.
 
 # docker network ls  -> you can see the created network
 # docker network inspect network-name -> you can see how many containers in this network
 # docker container inspect container-name --> you can see the network of this container
+#
+# some example showing on the internet to say to use the links tag, which would be deprecated in the later.
+# this tag is changed into the network tag.
+
+# 2.
+# use the mydb to change the localhost or later know the IP of mydb in the web application.yaml
+# that means the result is 
+#  datasource:
+#    url: jdbc:postgresql://mydb:5432/DEV_DB
