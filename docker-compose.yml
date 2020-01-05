@@ -24,22 +24,38 @@ services:
       - 8080:8080
     depends_on:
       - mydb
+    volumes:
+      - ~/.m2:/root/.m2
 
 # Note:
 # 1. 
-# Although I do not explicitly define the network for two containers,
-# the docker still create the bridge network for me.
+# I have not necessary explicitly to define the network for these two containers,
+# the docker will create the default bridge network for me.
 
-# docker network ls  -> you can see the created network
-# docker network inspect network-name -> you can see how many containers in this network
-# docker container inspect container-name --> you can see the network of this container
+# You can use the following command to undestand.
+# docker network ls                       -> you can see the created network name.
+# docker network inspect network-name     -> you can see how many containers in this one network
+# docker container inspect container-name -> you can see this container among which network
 #
-# some example showing on the internet to say to use the links tag, which would be deprecated in the later.
+# Some example from Google to say using the links tag, which would be deprecated in the later.
 # this tag is changed into the network tag.
 
 # 2.
-# use the mydb to change the localhost or later know the IP of mydb in the web application.yaml
+# Use the postgres service name(mydb) or aliaes name to change the ip of postgres among web project's application.yaml. 
+# The following is my trial records.  
+#   -> the original 'localhost' only works for this case when you run it without docker web container. 
+#   -> later know the IP of mydb then changing the web application.yaml's postgres ip is definitely not good for the production.
+#      but it helps me to know the postgres ip among the postgres container is equal to the service name or its aliaes name
+
 # that means the result is 
 #  datasource:
 #    url: jdbc:postgresql://mydb:5432/DEV_DB
-# further I also can use the aliases name or service name. like mudb or postgres_ip
+# Also can use the aliases name or service name. like mydb or postgres_ip
+
+# 3.
+# ~/ shorthand for the current user's home folder among Linux or Mac
+# ../ is the father path
+# ./ is the current path
+# In order to save the setup time, I can volume the local maven into the docker container.
+# After googling, .m2 is on the user's home among Linux system 
+
