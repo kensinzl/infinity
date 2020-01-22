@@ -1,11 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      image 'maven:3-alpine'
-      args '--net=host'
-    }
-
-  }
+  agent none
   stages {
     stage('Test') {
       steps {
