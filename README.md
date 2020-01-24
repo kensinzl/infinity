@@ -72,3 +72,4 @@ WHERE  email0_.email_id = ?
 ###### The above id if not put 0 or over 0 but put `null`, 
 ###### the result is still persist. 
 ###### But do not generate the above both select sql and directly generate inset.
+
