@@ -19,5 +19,11 @@ pipeline {
       }
     }
 
+    stage('Mail') {
+      steps {
+        emailext(subject: '$Default_Subject', attachLog: true, body: '$Default_Content ', compressLog: true, replyTo: 'zlchldjyy@gmail.com', saveOutput: true)
+      }
+    }
+
   }
 }
