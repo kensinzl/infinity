@@ -1,5 +1,11 @@
 pipeline {
-  agent none
+  agent {
+    docker {
+      image 'maven:3-alpine'
+      args '-v=/Users/zhaoliang/.m2:/root/.m2 --net=host'
+    }
+
+  }
   stages {
     stage('Test') {
       steps {
@@ -14,9 +20,10 @@ pipeline {
     }
 
   }
-  post {  
-         always {  
-                     emailext(subject: '$DEFAULT_SUBJECT', attachLog: true, body: '$DEFAULT_CONTENT ', saveOutput: true, to: '851561330@qq.com zlchldjyy@gmail.com') 
-         } 
-      }
+  post {
+    always {
+      emailext(subject: '$DEFAULT_SUBJECT', attachLog: true, body: '$DEFAULT_CONTENT ', saveOutput: true, to: '851561330@qq.com zlchldjyy@gmail.com')
+    }
+
+  }
 }
