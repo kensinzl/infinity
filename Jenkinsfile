@@ -21,7 +21,7 @@ pipeline {
 
     stage('Mail') {
       steps {
-        emailext(subject: '$DEFAULT_SUBJECT', attachLog: true, body: '$DEFAULT_CONTENT ', replyTo: '851561330@qq.com', saveOutput: true)
+        emailext(subject: '$DEFAULT_SUBJECT', attachLog: true, body: '$DEFAULT_CONTENT ', saveOutput: true, to: '851561330@qq.com')
       }
     }
 
