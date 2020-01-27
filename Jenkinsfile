@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'maven:3-alpine'
-      args '--publish 8080:8080 -v=/Users/zhaoliang/.m2:/root/.m2 --net=host'
+      args '-v=/Users/zhaoliang/.m2:/root/.m2 -p 8080:8080 --net=host'
     }
 
   }
