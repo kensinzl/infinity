@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'maven:3-alpine'
-      args '-v=/Users/zhaoliang/.m2:/root/.m2 -P --net=host'
+      args '-v=/Users/zhaoliang/.m2:/root/.m2 --p=8080:8080 --net=host'
     }
 
   }
@@ -22,9 +22,7 @@ pipeline {
 
     stage('Run') {
       steps {
-        sh '''mvn spring-boot:run
-
-curl -Iv http://localhost:8080/employee'''
+        sh 'mvn spring-boot:run'
       }
     }
 
