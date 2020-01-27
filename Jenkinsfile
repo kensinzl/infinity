@@ -19,6 +19,12 @@ pipeline {
       }
     }
 
+    stage('Run') {
+      steps {
+        sh 'spring-boot:run'
+      }
+    }
+
   }
   post {
     always {
