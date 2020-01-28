@@ -22,10 +22,10 @@ pipeline {
 
     stage('Run') {
       steps {
-        sh '''mvn spring-boot:run
+        sh '''mvn spring-boot:run'''
 
 
-curl http://localhost:8080/employee'''
+        sh '''curl http://localhost:8080/employee'''
       }
     }
 
