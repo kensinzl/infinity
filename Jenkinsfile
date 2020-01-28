@@ -21,19 +21,11 @@ pipeline {
     }
 
     stage('Run') {
-      parallel {
-        stage('Run') {
-          steps {
-            sh 'mvn spring-boot:run'
-          }
-        }
+      steps {
+        sh '''mvn spring-boot:run
 
-        stage('Curl') {
-          steps {
-            sh 'curl http://localhost:8080/employee'
-          }
-        }
 
+curl http://localhost:8080/employee'''
       }
     }
 
