@@ -32,13 +32,13 @@ online=false
 
 PID=$(ps -ef | grep infinity | grep -v grep | awk '{print $2}')
 
-echo "Before starting, pid: $PID alread existed."
+echo "Before starting service, check whether the PID existed or not."
 
 # STRING the length is 0 then true
-if [ -z "$PID"]; then
-  echo "Service has been stoped."
+if [ -z "$PID" ]; then
+  echo "No existed PID runing."
 else 
-  echo "Killing PID: $PID" 
+  echo "Killing PID: $PID before starting service." 
   kill -9 $PID
 fi
 
@@ -46,14 +46,14 @@ nohup java -jar ./target/infinity-1.0.0-SNAPSHOT.jar >/dev/null &
 
 echo "Service is starting."
 sleep 10
-echo "Check Service with one Get request."
+echo "Check service with one Get request."
 
 for (( i=1; i<=${check_attempts}; i++ ))
 do
+  echo "Test URL：http://localhost:8080/employee"
   code=`curl -sL --connect-timeout 20 --max-time 30 -w "%{http_code}\\n" http://localhost:8080/employee -o /dev/null`
   echo "The http status code: $code"
   if [ "${code}" = "200" ]; then
-    echo "Test URL：http://localhost:8080/employee"
     online=true
     break
   else
@@ -63,16 +63,13 @@ do
 done
 if $online; then
   echo "Service is normal."
-
   PID=$(ps -ef | grep infinity | grep -v grep | awk '{print $2}')
-  echo "Kill the PID: $PID."
-  if [ -z "$PID"]; then
-    echo "Service has been stoped."
+  if [ -z "$PID" ]; then
+    echo "Service has been killed."
   else 
-    echo "Killing PID: $PID" 
+    echo "Killing PID: $PID after testing service." 
     kill -9 $PID
   fi
-
   exit 0
 else
   echo "Service is failed."
