@@ -30,7 +30,7 @@ pipeline {
 check_attempts=3
 check_timeout=3
 
-check_url=${1}
+check_url=${check_url}
 
 online=false
 
