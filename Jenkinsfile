@@ -31,11 +31,12 @@ check_attempts=3
 check_timeout=3
 
 check_url=${check_url}
+version=${version}
 
 online=false
 
 
-PID=$(ps -ef | grep infinity-1.0.0-SNAPSHOT | grep -v grep | awk \'{print $2}\')
+PID=$(ps -ef | grep $version | grep -v grep | awk \'{print $2}\')
 
 echo "Before starting service, check whether the PID existed or not."
 
@@ -68,7 +69,7 @@ do
 done
 if $online; then
   echo "Service is normal."
-  PID=$(ps -ef | grep infinity-1.0.0-SNAPSHOT | grep -v grep | awk \'{print $2}\')
+  PID=$(ps -ef | grep $version | grep -v grep | awk \'{print $2}\')
   if [ -z "$PID" ]; then
     echo "Service has been killed."
   else 
