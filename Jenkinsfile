@@ -30,7 +30,7 @@ check_timeout=3
 online=false
 
 
-PID=$(ps -ef | grep infinity | grep -v grep | awk '{print $2}')
+PID=$(ps -ef | grep infinity-1.0.0-SNAPSHOT | grep -v grep | awk '{print $2}')
 
 echo "Before starting service, check whether the PID existed or not."
 
