@@ -23,6 +23,7 @@ pipeline {
     stage('Run') {
       environment {
         check_url = 'http://localhost:8080/employee'
+        version = 'infinity-1.0.0-SNAPSHOT'
       }
       steps {
         sh '''#!/bin/bash
