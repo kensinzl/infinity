@@ -20,11 +20,17 @@ pipeline {
       }
     }
 
-    stage('') {
+    stage('Run') {
       steps {
         sh '''#!/bin/bash
 
-mvn spring-boot:run'''
+check_attempts=3
+check_timeout=3
+
+#
+mvn spring-boot:run
+
+online=false'''
       }
     }
 
