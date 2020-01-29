@@ -20,6 +20,14 @@ pipeline {
       }
     }
 
+    stage('') {
+      steps {
+        sh '''#!/bin/bash
+
+mvn spring-boot:run'''
+      }
+    }
+
   }
   post {
     always {
