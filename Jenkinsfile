@@ -27,6 +27,8 @@ pipeline {
 check_attempts=3
 check_timeout=3
 
+check_url=${1}
+
 online=false
 
 
@@ -50,8 +52,8 @@ echo "Check service with one Get request."
 
 for (( i=1; i<=${check_attempts}; i++ ))
 do
-  echo "Test URL：http://localhost:8080/employee"
-  code=`curl -sL --connect-timeout 20 --max-time 30 -w "%{http_code}\\n" http://localhost:8080/employee -o /dev/null`
+  echo "Test URL: $check_url"
+  code=`curl -sL --connect-timeout 20 --max-time 30 -w "%{http_code}\\n" "${check_url}" -o /dev/null`
   echo "The http status code: $code"
   if [ "${code}" = "200" ]; then
     online=true
@@ -63,18 +65,21 @@ do
 done
 if $online; then
   echo "Service is normal."
-  PID=$(ps -ef | grep infinity | grep -v grep | awk '{print $2}')
+  PID=$(ps -ef | grep infinity-1.0.0-SNAPSHOT | grep -v grep | awk '{print $2}')
   if [ -z "$PID" ]; then
     echo "Service has been killed."
   else 
     echo "Killing PID: $PID after testing service." 
     kill -9 $PID
   fi
+  # success exist
   exit 0
 else
+  # fail exist
   echo "Service is failed."
   exit 1
 fi
+
 '''
       }
     }
