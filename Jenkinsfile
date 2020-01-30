@@ -48,13 +48,13 @@ else
   kill -9 $PID
 fi
 
+# start the spring-boot in the backend not avoid the later command
 nohup java -jar ./target/infinity-1.0.0-SNAPSHOT.jar >/dev/null &
 
 echo "Service is starting."
 # wait 10 seconds to wait finish the service setting up
 sleep 10
 echo "Check service with one POST & Get request."
-
 
 echo "POST Test URL: $check_url"
 # POST with payload
@@ -118,11 +118,11 @@ if $online; then
     kill -9 $PID
   fi
   # success exist
-  exit 0
+  #exit 0
 else
   # fail exist
   echo "Service is failed."
-  exit 1
+  #exit 1
 fi
 '''
       }
