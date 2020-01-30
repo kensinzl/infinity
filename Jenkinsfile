@@ -31,14 +31,10 @@ pipeline {
 check_attempts=3
 check_timeout=3
 
-
-isInstall=$(brew search jq)
-if [ -z "$isInstall" ]; then
-  echo "Installing jq." 
-  brew install jq
-else 
-  echo "Jq already installed." 
-fi
+echo "Installing jq." 
+wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+chmod +x ./jq
+cp jq /usr/bin
 
 check_url=${check_url}
 version=${version}
@@ -108,11 +104,11 @@ do
     movieName2=$(echo $result | jq '.[0]'| jq '.moviePOs'|jq '.[1]'| jq .movieName)
     if [ "${movieName1}" = "japan" && "${movieName2}" = "china" ]; then
       echo "The GET content test pass."
+      online=true
     else
       echo "The GET content test does not pass."
+      online=false
     fi
-
-    online=true
     break
   else
     echo "Can not get response, now wait ${check_timeout} seconds to retry."
