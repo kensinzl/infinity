@@ -31,6 +31,8 @@ pipeline {
 check_attempts=3
 check_timeout=3
 
+brew install jq
+
 check_url=${check_url}
 version=${version}
 
