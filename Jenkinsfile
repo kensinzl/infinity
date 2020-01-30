@@ -96,11 +96,11 @@ do
     # check the content of GET
     result=$(curl -s -X GET http://localhost:8080/employee)
     if [ -z "$result" ]; then
-      echo "The GET content test pass."
-      online=true
-    else
       echo "The GET content test does not pass."
       online=false
+    else
+      echo "The GET content test pass."
+      online=true
     fi
     break
   else
