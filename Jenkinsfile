@@ -48,7 +48,7 @@ else
   kill -9 $PID
 fi
 
-# start the spring-boot in the backend not avoid the later command
+# start the spring-boot in the backend not avoid the later command(nohub &)
 nohup java -jar ./target/infinity-1.0.0-SNAPSHOT.jar >/dev/null &
 
 echo "Service is starting."
@@ -118,11 +118,11 @@ if $online; then
     kill -9 $PID
   fi
   # success exist
-  #exit 0
+  exit 0
 else
   # fail exist
   echo "Service is failed."
-  #exit 1
+  exit 1
 fi
 '''
       }
