@@ -42,12 +42,24 @@ ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
 COPY pom.xml /build/
+# need to know, this one just copy and do not enter the /build/ folder
 COPY src /build/src/
 
-COPY entrypoint.sh /build/src/
+# Note: you need to know what is the difference between the following
+# COPY src /build/src/  -> copy the whole src folder among /build/
+# that means, cd /build, you can see the whole src folder
 
-WORKDIR /build/
+# COPY src /build/      -> copy the sub_main and sub_test folder among /build/
+# that means, cd /build, you can see the whole main and test folder
 
-RUN chmod 777 /build/src/entrypoint.sh
+COPY entrypoint.sh /build/
 
-ENTRYPOINT ["entrypoint.sh"]
+# WORKDIR /build/
+# has tested, with or without it, works fine
+
+RUN chmod 777 /build/entrypoint.sh
+
+# ENTRYPOINT ["/build/entrypoint.sh"]
+# docker-compose entrypoint can overwrite the entrypoint of dockerfile.
+# here, entrypoint say hey where is our entrypoint.sh location
+# so, remove the entrypoint tag from dockerfile and let it is defined from docker-compose

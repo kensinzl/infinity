@@ -4,7 +4,7 @@ services:
     build:
       context: .
       target: db
-    container_name: postgres_db
+    container_name: postgres_db_test
     restart: always
     networks:
       default:
@@ -19,7 +19,10 @@ services:
       target: web_api
     container_name: infinity_web
     restart: always
-    entrypoint: /build/src/entrypoint.sh
+    entrypoint: /build/entrypoint.sh
+    # docker-compose entrypoint can overwrite the entrypoint of dockerfile.
+    # here, entrypoint say hey this is our entrypoint.sh location
+    # so, remove the entrypoint tag from dockerfile and let it is defined from docker-compose
     ports:
       - 8080:8080
     volumes:
