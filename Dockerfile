@@ -37,29 +37,34 @@ RUN echo "Cleaning and setting links"
 RUN rm -f /tmp/apache-maven.tar.gz
 RUN ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
+
 # 6- Define environmental variables required by Maven, like Maven_Home directory and where the maven repo is located
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
-COPY pom.xml /build/
+WORKDIR /build/
+# 使用 WORKDIR 指令可以来指定工作目录（或者称为当前目录），以后各层的当前目录就被改为指定的目录，如该目录不存在，WORKDIR 会帮你建立目录。
+# In this instance, you need to know what is the difference between the following
+# WORKDIR /build/  -> when you enter the container, the first folder you enter is the build, like cd /build
+# without WORKDIR  -> when you enter the container, the first folder you enter is the root, like cd /
+
+# because using workdir /build/, the current path is /build/, so ./ that means current path(/build/)
+COPY pom.xml ./
 # need to know, this one just copy and do not enter the /build/ folder
-COPY src /build/src/
+COPY src ./src/
 
 # Note: you need to know what is the difference between the following
-# COPY src /build/src/  -> copy the whole src folder among /build/
+# COPY src ./src/  -> copy the whole src folder among /build/
 # that means, cd /build, you can see the whole src folder
 
 # COPY src /build/      -> copy the sub_main and sub_test folder among /build/
 # that means, cd /build, you can see the whole main and test folder
 
-COPY entrypoint.sh /build/
+COPY entrypoint.sh ./
 
-# WORKDIR /build/
-# has tested, with or without it, works fine
+RUN chmod 777 ./entrypoint.sh
 
-RUN chmod 777 /build/entrypoint.sh
-
-# ENTRYPOINT ["/build/entrypoint.sh"]
+# ENTRYPOINT ["./entrypoint.sh"]
 # docker-compose entrypoint can overwrite the entrypoint of dockerfile.
 # here, entrypoint say hey where is our entrypoint.sh location
 # so, remove the entrypoint tag from dockerfile and let it is defined from docker-compose

@@ -1,6 +1,6 @@
 #! /bin/bash
 # su - dev -c "cd /build"
-cd /build
+# cd /build
 # mvn package
 
 # cd /build/target/
