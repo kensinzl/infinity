@@ -55,7 +55,7 @@ ifconfig | grep inet
 nslookup localhost
 
 2. to see one port among Mac 
-lsop -i tcp:8080
+lsof -i tcp:8080
 
 3.
 lsof -i tcp:8080   -> you can know the pid, but you may dont know what is the pid doing
