@@ -83,6 +83,7 @@ if [ "${postCode}" = "201" ]; then
   echo "The POST request is successful, http status code: $postCode."
 else
   echo "The POST request is failed, http status code: $postCode."
+  online=false
 fi
 
 
@@ -100,6 +101,7 @@ do
       online=false
     else
       echo "The GET content test pass."
+      echo "GET Result: $result."
       online=true
     fi
     break
