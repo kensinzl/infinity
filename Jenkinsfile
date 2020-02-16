@@ -36,7 +36,7 @@ version=${version}
 
 online=false
 
-PID=$(ps -ef | grep $version | grep -v grep | awk '{print $2}')
+PID=$(ps -ef | grep $version | grep -v grep | awk \'{print $2}\')
 
 echo "Before starting service, check whether the PID existed or not."
 
@@ -52,13 +52,13 @@ fi
 nohup java -jar ./target/infinity-1.0.0-SNAPSHOT.jar >/dev/null &
 
 echo "Service is starting."
-# wait 10 seconds to wait finish the service setting up
-sleep 10
+# wait 15 seconds to wait finish the service setting up
+sleep 15
 echo "Check service with one POST & Get request."
 
 echo "POST Test URL: $check_url"
 # POST with payload
-postCode=$(curl -s -X POST -H "Content-type:application/json" -d '{
+postCode=$(curl -s -X POST -H "Content-type:application/json" -d \'{
   "id": null,
   "employeeName": "Matthew",
   "moviePOs": [
@@ -77,12 +77,12 @@ postCode=$(curl -s -X POST -H "Content-type:application/json" -d '{
           
       }
   ]
-}' -w "%{http_code}\\n" -o /dev/null http://localhost:8080/employee)
+}\' -w "%{http_code}\\n" -o /dev/null http://localhost:8080/employee)
 
 if [ "${postCode}" = "201" ]; then
   echo "The POST request is successful, http status code: $postCode."
 else
-  echo "The POST request is failed."
+  echo "The POST request is failed, http status code: $postCode."
 fi
 
 
@@ -110,7 +110,7 @@ do
 done
 if $online; then
   echo "Service is normal."
-  PID=$(ps -ef | grep $version | grep -v grep | awk '{print $2}')
+  PID=$(ps -ef | grep $version | grep -v grep | awk \'{print $2}\')
   if [ -z "$PID" ]; then
     echo "Service has been killed."
   else 
