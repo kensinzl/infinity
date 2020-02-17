@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/DEV_DB
     username: kensin
-    password: 989277229
+    password: 123
   jpa:
     hibernate:
       # Hibernate ddl auto (create, create-drop, validate, update)
