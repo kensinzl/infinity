@@ -22,7 +22,7 @@ public class EmailController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailController.class);
 
     /**
-     * Just save, of course not show the employee_name
+     * Just save, of course not show the employee_name.
      */
     @PostMapping
     public ResponseEntity<List<EmailPO>> createMovie(@RequestBody List<EmailPO> emailPOs) {
