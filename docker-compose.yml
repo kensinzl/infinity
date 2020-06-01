@@ -1,0 +1,25 @@
+# 1. remove the pwd of postgres docker image using docker-compose
+# 2. run the spring in the docker
+# 3. try using the same postgres version
+
+version: "3.4"
+services:
+  mydb:
+    build:
+      context: .
+    container_name: postgres_db_test
+    restart: always
+    networks:
+      default:
+        aliases:
+          - postgres_ip
+    ports:
+      - 5432:5432
+
+  # sonarqube:
+  #   image: sonarqube:7.9.1-community
+  #   container_name: sonaq
+  #   restart: always
+  #   ports:
+  #     - 9000:9000
+
