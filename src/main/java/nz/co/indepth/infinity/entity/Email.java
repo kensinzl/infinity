@@ -251,6 +251,8 @@ public class Email {
         // @JoinColumn(name = "LOCATION_ID", nullable = true, insertable = false, updatable = false) 
 
         // private Location location; 
+        // https://hibernate.atlassian.net/browse/HHH-8229?page=com.atlassian.jira.plugin.system.issuetabpanels%3Aall-tabpanel
+        // THIS IS ONE KNOWN ISSUE, LOCATION_ID SHOULD ACCEPT NULL AS FK BECAUSE OF NULLABLE=TRUE
 
         // org.h2.jdbc.JdbcSQLException: NULL not allowed for column "LOCATION_ID"; SQL statement: 
 
