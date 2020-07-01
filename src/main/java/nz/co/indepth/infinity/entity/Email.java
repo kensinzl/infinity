@@ -347,6 +347,10 @@ public class Email {
         // nz.co.niwa.mintaka.entity.product.ProductHierarchyItem.location -> nz.co.niwa.mintaka.entity.location.Location 
 
         // ph.setLocation(location); 
+        
+        
+        // em.find(ProductHierarchy.class, PK) => select * from ProductHierarchy inner/left join with all eager object(optional)
+        // em.createQuery("select ph from ProductHierarchy") => select * from product_hierarchy, and eager object with sub_sql
     */
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "employee_id",
