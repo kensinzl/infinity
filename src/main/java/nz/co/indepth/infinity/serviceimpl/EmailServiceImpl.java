@@ -80,6 +80,10 @@ public class EmailServiceImpl implements EmailService {
      *  In this instance, if you can assume this delete operation would manipulate huge items.
      *  It is better to use @Query("delete from entity from where condition").
      *  This only execute one SQL statement.
+     *
+     *  Update: 2020-11-17
+     *  JpaRepository::deleteInBatch also can give a efficiency way to delete as a batch, the code like delete from table where condition.
+     *  Concept is viatl, when huge delete, update and save may need to consider the batch
      */
     @Deprecated
     public String deleteEmails() {
