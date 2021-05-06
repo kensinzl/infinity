@@ -60,3 +60,12 @@ services:
 # In order to save the setup time, I can volume the local maven into the docker container.
 # After googling, .m2 is on the user's home among Linux system 
 
+# Image three projects(containers) and deployed among one docker-compose.yaml, M project referring E project refering T project
+# The service name have to use the port among net rather than host
+
+#   80         8080.   8081       => HOST
+#--------------------------------
+# |------|  |------| |------|
+# | 8080 |. | 8080 | | 8080 |     => ISOLATION ONE NET, but three server
+# |------|  |------| |------|
+#--------------------------------
