@@ -47,11 +47,15 @@ services:
 #   -> the original 'localhost' only works for this case when you run it without docker web container. 
 #   -> later know the IP of mydb then changing the web application.yaml's postgres ip is definitely not good for the production.
 #      but it helps me to know the postgres ip among the postgres container is equal to the service name or its aliaes name
-
 # that means the result is 
 #  datasource:
 #    url: jdbc:postgresql://mydb:5432/DEV_DB
 # Also can use the aliases name or service name. like mydb or postgres_ip
+
+# 2021-11-21 finding, it is not necessary to make app and DB in a same docker-compose.yml file(same service) 
+# because at that time I do not know the public IP of local host
+# if eg: url: jdbc:postgresql://192.168.1.74:5432/DEV_DB, this 192.168.1.74 is the public ip of the host machine, it also works for seperate two docker-compose file,
+# one for app and the other is for the DB
 
 # 3.
 # ~/ shorthand for the current user's home folder among Linux or Mac
