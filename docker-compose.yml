@@ -56,6 +56,7 @@ services:
 # because at that time I do not know the public IP of local host
 # if eg: url: jdbc:postgresql://192.168.1.74:5432/DEV_DB, this 192.168.1.74 is the public ip of the host machine, it also works for seperate two docker-compose file,
 # one for app and the other is for the DB
+# 192.168.1.74 -> System Preference -> Network
 
 # 3.
 # ~/ shorthand for the current user's home folder among Linux or Mac
