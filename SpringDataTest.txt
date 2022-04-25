@@ -1,0 +1,339 @@
+    // 1. SimpleJpaRepository has the default read-only @Transactional at class level.
+    // But for CUD will add modify @Transactional at the function class which supports modification capability. 
+    // That means each CRUD operation will open a new transaction respectively and each CUD operation will directly reflect into DB after the CUD finish. 
+    // Transaction finish means commit which finally reflect to DB .
+    
+    // 2. Given the create and update operation among one service. 
+    // Then after create operation, the DB has already been reflected, so even if something failed among Update operation, you can not roll-back.
+    // Unless you put the @Transactional at the service function level, which will disable the default transaction annotation of CRUD, and make this service function as a whole @Transactional.
+    // The DB reflection will occur only when all operations successfully finish, eg: 1. C 2. U, put a breakpoint at the U, and then you fetch DB from PL-SQL, you can not see the inserted record(1.C).
+    // So @Transactional of service fun can ensure roll-back if error happen during execution.
+    // Note: it like your CUD SQL at the SQLDeveloper, you see the result at your transaction connect, but others people still see the unchanged value, until you commit and of course you can roll-back.
+    
+    // 3. If you write your CUD operation, you need to add 
+    // @Modifying: make run as the executeUpdate and also add clearAutomatically=true 
+    // clear the underlying persistence context after executing the modifying query.
+    // @Transactional: make the operation support the CHANGE action
+    
+    // 4. 1L is the persistence context, it is synchronized with the DB, when commit finish, the PC will be flushed into DB
+    // Note: @Modify clearAutomatically=false condition, I delete one entity and the PC still contains, but when commit, the DB still delete it.
+    // So just have a remember is enough.
+    
+//    public void myTest() {
+//        //Test1
+//        // check myTest without Transaction annotation, the following is a transaction respectively or not
+//        
+//        // 1. all tasks are at Persistence Context, with a transaction because SimpleJpaRepository put @Transaction at the class level 
+//        List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//        
+//        // 2.update this entity directly to DB after step2 because save default with the @Transactional
+//        IngestionTask taskName2 = 
+//                tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//        taskName2.setFileName("Test222_new.csv");
+//        ingestionTaskDAO.save(taskName2); //with a transaction because SimpleJpaRepository put @Transaction at the save function level
+//        
+//        // 3. check Test222.csv exist or not? not exited among DB, without a transaction because it is my customer function, I do not add a transaction
+//        IngestionTask noResult = ingestionTaskDAO.fetchTaskByName("Test222.csv");
+//        if(Objects.isNull(noResult)) {
+//            System.out.println(">>>>> should be without result");
+//        }
+//    }
+    
+//    public void myTest() {
+//        //Test2
+//        // check without rollback
+//        
+//        // 1. all tasks are at Persistence Context, with a transaction because SimpleJpaRepository put @Transaction at the class level 
+//        List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//        
+//        // 2.update one entity directly go to db before step 3? yes, checked
+//        IngestionTask taskName2 = 
+//                tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//        taskName2.setFileName("Test222_new.csv");
+//        ingestionTaskDAO.save(taskName2); //with a transaction because SimpleJpaRepository put @Transaction at the save function level
+//        
+//        if(1==1) {
+//            throw new RuntimeException("intentionally one");
+//        }
+//        // 3. will not jump into this line, and without rollback for the step2
+//        IngestionTask noResult = ingestionTaskDAO.fetchTaskByName("Test222.csv");
+//        if(Objects.isNull(noResult)) {
+//            System.out.println(">>>>> should be without result");
+//        }
+//    }
+    
+//      @Transactional
+//      public void myTest() {
+//          //Test3
+//          // check added @Transactional => 
+//          //    the myTest function will only use this transaction, 
+//          //        the two transactions from SimpleJpaRepository become disabled
+//          // So this function only has one transaction
+//          
+//          // 1. @Transaction of findAll become disabled
+//          List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//          
+//          // 2.@Transaction of save become disabled so DB not change after finish step2 before step3
+//          IngestionTask taskName2 = 
+//                  tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//          taskName2.setFileName("Test222_new.csv");
+//          ingestionTaskDAO.save(taskName2); //with a transaction because SimpleJpaRepository put @Transaction at the save function level
+//          
+//          // 3. finish step 3, the DB will show the new name, but noResult still null, that means fetch from PC
+//          IngestionTask noResult = ingestionTaskDAO.fetchTaskByName("Test222.csv");
+//          if(Objects.isNull(noResult)) {
+//              System.out.println(">>>>> should be without result");
+//          }
+//    }
+    
+//    @Transactional
+//    public void myTest() {
+//        //Test4
+//        // check added @Transactional => 
+//        //    the myTest function will only use this transaction, 
+//        //        the two transactions from SimpleJpaRepository become disabled
+//        // So this function only has one transaction
+//        
+//        // 1. @Transaction of findAll become disabled
+//        List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//        
+//        // 2.@Transaction of save become disabled so DB not change after finish step2 before step3
+//        IngestionTask taskName2 = 
+//                tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//        taskName2.setFileName("Test222_new.csv");
+//        ingestionTaskDAO.save(taskName2); //with a transaction because SimpleJpaRepository put @Transaction at the save function level
+//        
+//        if(1==1) {
+//            throw new RuntimeException("intentionally one");
+//        }
+//        // 3. will not jump into this line, and will rollback for the step2
+//        IngestionTask noResult = ingestionTaskDAO.fetchTaskByName("Test222.csv");
+//        if(Objects.isNull(noResult)) {
+//            System.out.println(">>>>> should be without result");
+//        }
+//  }    
+    
+    
+//      @Transactional
+//      public void myTest() {
+//          //Test5
+//          // derived SQL is always from DB,
+//          
+//          // 1. fetch into Persistence Context
+//          List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//          
+//          // 2.@Transaction of save become disabled so DB not change after finish step2 before step3
+//          IngestionTask taskName2 = 
+//                  tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//          taskName2.setFileName("Test222_new.csv");
+//          ingestionTaskDAO.save(taskName2); //with a transaction because SimpleJpaRepository put @Transaction at the save function level
+//          
+//          // 3. default em.find, fetch from Persistence Context, No SQL
+//          IngestionTask result = ingestionTaskDAO.findById(taskName2.getIngestionId()).get();//          System.out.println(">>>>> Not Print1");
+//          
+//          // 4. derived SQL always fetch from DB
+//          ingestionTaskDAO.findByIngestionId(taskName2.getIngestionId());
+//          System.out.println(">>>>> Print2");
+
+//    @Transactional
+//    public void myTest() {
+//        //Test6
+//        // => check if not clear context after deleting(clearAutomatically = false)
+//        // 1. fetch into Persistence Context
+//        List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//        
+//        // 2. after delete it but still on the 
+//        // persistence context because not clear the persistence context
+//        // DB because it is a transaction
+//        // print the SQL because customer method
+//        IngestionTask taskName2 = 
+//                tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//        ingestionTaskDAO.deleteTaskById(taskName2.getIngestionId());
+//        
+//        // 3. default em.find, fetch from Persistence Context to get the object, No SQL
+//        IngestionTask result = ingestionTaskDAO.findById(taskName2.getIngestionId()).get();
+//        System.out.println(">>>>> still find and without Print1");
+//        
+//        // 4. derived SQL always fetch from DB and in this transaction without this value from DB, here need to be cared.
+//        IngestionTask result2 = ingestionTaskDAO.findByIngestionId(taskName2.getIngestionId());
+//        if(Objects.isNull(result2)) {
+//            System.out.println(">>>>> not find because it from the DB transaction and with Print2");
+//        } else {
+//            System.out.println(">>>>> find because it from the DB transaction and with Print2");
+//        }
+//  }
+    
+//    @Transactional
+//    public void myTest() {
+//        //Test7
+//        // => check if not clear context after deleting(clearAutomatically = false) and with the default delete
+//        // 1. fetch into Persistence Context
+//        List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//        
+//        // 2. after delete it will
+//        // no exist among persistence context because I think the default way has the clearAutomatically = true
+//        // still exist among DB because it is a transaction
+//        // delete SQL can not print because from persistence context
+//        IngestionTask taskName2 = 
+//                tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//        ingestionTaskDAO.delete(taskName2);
+//        
+//        // 3. default em.find, fetch from Persistence Context to get the object, No SQL
+//        Optional<IngestionTask> result = ingestionTaskDAO.findById(taskName2.getIngestionId());
+//        if(result.isPresent()) {
+//            System.out.println(">>>>> should be without value");
+//        } else {
+//            System.out.println(">>>>> can not find and without SQL, I thought be with SQL");
+//        }
+//        
+//        // 4. derived SQL always fetch from DB and in this transaction without this value from DB
+//        IngestionTask result2 = ingestionTaskDAO.findByIngestionId(taskName2.getIngestionId());
+//        if(Objects.isNull(result2)) {
+//            System.out.println(">>>>> not find because it from the DB transaction and with Print2");
+//        }
+//  }
+    
+//    @Transactional
+//    public void myTest() {
+//        //Test8
+//        // => check if clear context after deleting(clearAutomatically = true), this should work like default delete
+//        // 1. fetch into Persistence Context
+//        List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//        
+//        // 2. after delete it 
+//        // not exist among persistence context because clear the persistence context
+//        // exist DB because it is a transaction
+//        // print the SQL because customer method
+//        IngestionTask taskName2 = 
+//                tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//        ingestionTaskDAO.deleteTaskById(taskName2.getIngestionId());
+//        
+//        // 3. default em.find, fetch from Persistence Context to get the object, No SQL
+//        Optional<IngestionTask> result = ingestionTaskDAO.findById(taskName2.getIngestionId());
+//        if(result.isPresent()) {
+//            System.out.println(">>>>> should not come here");
+//        } else {
+//            System.out.println(">>>>> can not find and with Print1");
+//        }
+//        
+//        // 4. derived SQL always fetch from DB and in this transaction without this value from DB, here need to be cared.
+//        IngestionTask result2 = ingestionTaskDAO.findByIngestionId(taskName2.getIngestionId());
+//        if(Objects.isNull(result2)) {
+//            System.out.println(">>>>> not find because it from the DB transaction and with Print2");
+//        } else {
+//            System.out.println(">>>>> should not come here");
+//        }
+//  }
+    
+//      @Transactional
+//      public void myTest() {
+//          //Test9
+//          // => check if clear context after deleting(clearAutomatically = false), after delete whole API, can I still get this ID value from a separate REST API , Nope, I think.
+//          // because the first level cache is gone after Rest request API finish.
+//          // https://www.baeldung.com/jpa-hibernate-persistence-context
+//          // 1. fetch into Persistence Context
+//          List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//          
+//          // 2. after delete it 
+//          // not exist among persistence context because clear the persistence context
+//          // exist DB because it is a transaction
+//          // print the SQL because customer method
+//          IngestionTask taskName2 = 
+//                  tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//          ingestionTaskDAO.deleteTaskById(taskName2.getIngestionId());
+//          
+//          // 3. default em.find, fetch from Persistence Context to get the object, No SQL
+//          Optional<IngestionTask> result = ingestionTaskDAO.findById(taskName2.getIngestionId());
+//          if(result.isPresent()) {
+//              System.out.println(">>>>> come here");
+//          } else {
+//              System.out.println(">>>>> should not come here");
+//          }
+//          
+//          // 4. derived SQL always fetch from DB and in this transaction without this value from DB, here need to be cared.
+//          IngestionTask result2 = ingestionTaskDAO.findByIngestionId(taskName2.getIngestionId());
+//          if(Objects.isNull(result2)) {
+//              System.out.println(">>>>> not find because it from the DB transaction and with Print2");
+//          } else {
+//              System.out.println(">>>>> should not come here");
+//          }
+//    }
+    
+    // Not a good plan
+//     public void myTest() {
+//          //Test10
+//          // check myTest without Transaction annotation, the following is a transaction respectively or not
+//          
+//          // 1. all tasks are at Persistence Context, with a transaction because SimpleJpaRepository put @Transaction at the class level 
+//          List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//          // SQL print
+//          
+//          // 2.update one entity directly go to db
+//          IngestionTask taskName2 = 
+//                  tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//          taskName2.setFileName("Test222_new.csv");
+//          ingestionTaskDAO.save(taskName2); //with a transaction because SimpleJpaRepository put @Transaction at the save function level
+//          // SQL print
+//          
+//          IngestionTask resultFromDB = ingestionTaskDAO.findById(taskName2.getIngestionId()).get();
+//          // SQL not print, because even the transaction finish, the em not close
+//          
+//          // 3. check Test222.csv exist or not? not exited among DB, without a transaction becasue it is my customer function, I do not add a transaction
+//          IngestionTask noResult = ingestionTaskDAO.fetchTaskByName("Test222.csv");
+//          if(Objects.isNull(noResult)) {
+//              System.out.println(">>>>> should be without result");
+//          }
+//    }
+    
+//      public void myTest() {
+//          //Test11
+//          // only has clearAutomatically=true, remove the persistence context or update the PC only remove this entity
+//          
+//          // 1. all tasks are at Persistence Context, with a transaction because SimpleJpaRepository put @Transaction at the class level 
+//          List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//          
+//          // 2.update one entity name and directly into DB
+//          IngestionTask taskName2 = 
+//                  tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//          // clearAutomatically=true
+//          ingestionTaskDAO.udpateTaskName("Test222_new.csv", taskName2.getIngestionId()); 
+//          
+//          // check taskName2 has been cleared from PC or just update, => clear, because I saw findById SQL and fetch from DB
+//          IngestionTask resultFromDB = ingestionTaskDAO.findById(taskName2.getIngestionId()).get();
+//          if(Objects.equals(resultFromDB.getFileName(), "Test222_new.csv")) {
+//          } else {
+//          }
+//          
+//          // does others will also be clear or not
+//          IngestionTask taskName3 = 
+//                  tasks.stream().filter(task -> Objects.equals("Test333.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//          IngestionTask taskName4 = 
+//                  tasks.stream().filter(task -> Objects.equals("Test444.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//          if(1==1) {
+//              
+//          }
+//    }
+      
+//      @Transactional
+//      public void myTest() {
+//          //Test11
+//          // flushAutomatically=true, flush into DB before executing the SQL
+//          
+//          // 1. all tasks are at Persistence Context, with a transaction because SimpleJpaRepository put @Transaction at the class level 
+//          List<IngestionTask> tasks = ingestionTaskDAO.findAll();
+//          
+//          // 2.update one entity name and directly into DB
+//          IngestionTask taskName2 = 
+//                  tasks.stream().filter(task -> Objects.equals("Test222.csv", task.getFileName())).collect(Collectors.toList()).get(0);
+//          taskName2.setFileName("Test222_new.csv");
+//          ingestionTaskDAO.save(taskName2);
+//          
+//          // I should see Test222_new.csv from save operation reflected in DB
+//          ingestionTaskDAO.flushThenDeleteByName("Test222_new.csv"); 
+//          
+//          // check taskName2 has been cleared from PC or just update, => clear, because I saw findById SQL and fetch from DB
+//          Optional<IngestionTask> resultFromDB = ingestionTaskDAO.findById(taskName2.getIngestionId());
+//          if(resultFromDB.isPresent()) {
+//          } else {
+//          }
+//    }  
