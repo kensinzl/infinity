@@ -1,0 +1,58 @@
+
+@Repository
+public interface IngestionTaskDAO extends JpaRepository<IngestionTask, Long>, JpaSpecificationExecutor<IngestionTask> {
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Transactional
+    @Query("UPDATE IngestionTask t SET t.status = nz.co.niwa.ecoconnect.batch.ingestion.model.IngestionStatus.PROCESSING, t.startTime = CURRENT_TIMESTAMP "
+            + "WHERE t.ingestionId = :ingestionId")
+    void startIngestion(@Param("ingestionId") final Long ingestionId);
+    
+    
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Transactional
+    @Query("UPDATE IngestionTask t SET t.status = nz.co.niwa.ecoconnect.batch.ingestion.model.IngestionStatus.ERROR, t.endTime = CURRENT_TIMESTAMP, t.message= :errorMessage "
+            + "WHERE t.ingestionId = :ingestionId")
+    void taskFailedWithError(@Param("ingestionId") final Long ingestionId, @Param("errorMessage") final String errorMessage);
+    
+    
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Transactional
+    @Query("UPDATE IngestionTask t SET t.status=nz.co.niwa.ecoconnect.batch.ingestion.model.IngestionStatus.DONE, t.endTime = CURRENT_TIMESTAMP "
+            + "WHERE t.ingestionId = :ingestionId")
+    void completeIngestion(@Param("ingestionId") final Long ingestionId);
+    
+    
+    @Query("SELECT CASE WHEN COUNT(t) > 0 THEN TRUE ELSE FALSE END "
+            + "FROM IngestionTask t "
+            + "WHERE LOWER(t.fileName) = LOWER(:fileName) "
+            + "AND (t.status != nz.co.niwa.ecoconnect.batch.ingestion.model.IngestionStatus.DONE "
+            + "     AND t.status != nz.co.niwa.ecoconnect.batch.ingestion.model.IngestionStatus.ERROR) ")
+    boolean isNotFinishedFile(@Param("fileName") final String fileName);
+    
+    @Query("select t from IngestionTask t where t.fileName = :name")
+    IngestionTask fetchTaskByName(String name);
+    
+    //@Modifying(clearAutomatically = true)
+    List<IngestionTask> findByFileName(String name);
+    
+    IngestionTask findByIngestionId(Long ingestionId);
+    
+//    @Modifying
+//    @Query("delete IngestionTask t where t.ingestionId = :ingestionId")
+//    int deleteTaskById(Long ingestionId);
+    
+    @Modifying(clearAutomatically=false)
+    @Query("delete IngestionTask t where t.ingestionId = :ingestionId")
+    int deleteTaskById(Long ingestionId);
+    
+    @Modifying(clearAutomatically=true)
+    @Transactional
+    @Query("update IngestionTask t set t.fileName = :name where t.ingestionId = :ingestionId")
+    int udpateTaskName(String name, Long ingestionId);
+    
+    @Modifying(clearAutomatically=true, flushAutomatically=true)
+    @Transactional
+    @Query("delete IngestionTask t where t.fileName = :name")
+    int flushThenDeleteByName(String name);
+}
