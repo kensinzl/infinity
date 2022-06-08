@@ -37,6 +37,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeMapper.employeeToPo (employeeRepository.save (employee));
     }
 
+    /**
+    * https://vladmihalcea.com/best-spring-data-jparepository/
+    * => he means after find the managed enetity, and then directly set the changed value, no need to call save or merge. it makes sense.
+    *    becasue the instance among the function range is still among PC
+    *    
+    *    what he means for the cacasde action unbenefical for CPU, sorry, I does not get it
+    * 
+    * https://www.codejava.net/frameworks/spring-boot/jpa-entitymanager-persist-vs-merge
+    * => if do merge, it just update the managed instance,
+    * 
+    * so I prefer to stick what we have done, find -> merge, and customer what he mention unsupport repository is not easy readable.
+    *
+    **/
     @Override
     public EmployeePO updateEmployee(EmployeePO po) {
         Employee employee = employeeMapper.employeePOToEntity (po);
