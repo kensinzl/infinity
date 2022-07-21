@@ -352,6 +352,38 @@ public class Email {
         // em.find(ProductHierarchy.class, PK) => select * from ProductHierarchy inner/left join with all eager object(optional)
         // em.createQuery("select ph from ProductHierarchy") => select * from product_hierarchy, and eager object with sub_sql
     */
+    
+    
+    /**
+    Flush Vs Commit
+
+flush() will synchronize your database with the current state of object/objects held in the memory but it does not commit the transaction. So, if you get any exception after flush() is called, then the transaction will be rolled back. You can synchronize your database with small chunks of data using flush() instead of committing a large data at once using commit() and face the risk of getting an OutOfMemoryException.
+
+commit() will make data stored in the database permanent. There is no way you can rollback your transaction once the commit() succeeds.
+
+
+https://stackoverflow.com/questions/14581865/hibernate-flush-and-commit
+=> 
+
+Session session = sessionFactory.openSession();
+Transaction tx = session.beginTransaction();
+
+
+for (int i = 0; i < 100000; i++) {
+    Customer customer = new Customer(...);
+    session.save(customer);
+    if (i % 20 == 0) { // 20, same as the JDBC batch size
+        // flush a batch of inserts and release memory:
+        session.flush();
+        session.clear();
+    }
+}
+
+tx.commit();
+session.close();
+Without the call to the flush method, your first-level cache would throw an OutOfMemoryException
+**/
+
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "employee_id",
                 referencedColumnName = "employee_id",
