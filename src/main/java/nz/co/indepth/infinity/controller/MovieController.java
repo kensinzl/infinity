@@ -1,7 +1,7 @@
 package nz.co.indepth.infinity.controller;
 
 import nz.co.indepth.infinity.po.MoviePO;
-import nz.co.indepth.infinity.serviceimpl.MovieServiceImpl;
+import nz.co.indepth.infinity.service.MovieService;
 import nz.co.indepth.infinity.validator.BeanValidators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class MovieController {
 
     @Autowired
-    private MovieServiceImpl movieService;
+    private MovieService movieService;
 
     @Autowired
     private BeanValidators beanValidators;

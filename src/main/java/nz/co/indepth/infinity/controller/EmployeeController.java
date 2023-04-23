@@ -1,7 +1,7 @@
 package nz.co.indepth.infinity.controller;
 
 import nz.co.indepth.infinity.po.EmployeePO;
-import nz.co.indepth.infinity.serviceimpl.EmployeeServiceImpl;
+import nz.co.indepth.infinity.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.List;
 public class EmployeeController {
 
     @Autowired
-    private EmployeeServiceImpl employeeService;
+    private EmployeeService employeeService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
